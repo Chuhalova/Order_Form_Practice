@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('programming-order-form', 'Controller@getIndex');
 Route::post('ajax-request', 'Controller@ajaxRequest');
+Route::post('add-order', 'Controller@addOrder');

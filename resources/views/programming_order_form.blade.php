@@ -9,7 +9,7 @@
     <link href="{{ asset('custom3.css') }}" rel="stylesheet">
 </head>
 
-<body>
+<body onload="ajaxPrice()">
     <div class="Page__body Page__width">
         <div class="rc-ui-blocker rc-ui-blocker--size-m rc-ui-blocker--transparency-hard">
             <div class="NewOrder">
@@ -25,7 +25,9 @@
                             </div>
                             <div class="rc-orderform__step">
                                 <div class="rc-orderform__step-flag"><span class="rc-orderform__step-flag__count">1.</span>Paper details</div>
-                                <form class="rc-orderform__step__body" _lpchecked="1">
+                                <form action="{{url('/add-order/') }}" method='POST' class="rc-orderform__step__body" _lpchecked="1">
+                                    @csrf
+                                    {{method_field('POST')}}
                                     <div class="rc-orderform__row rc-orderform__row--service-type">
                                         <div class="rc-orderform__feature-heading"> </div>
                                         <div class="rc-orderform__feature-body">
@@ -48,13 +50,13 @@
                                                     <div class="Select DisciplineControl__select Select--single is-searchable has-value">
                                                         <div class="Select-control">
                                                             <select style="width:100%; outline:none!important;border:none!important;" name="disciplines" id="disciplines" class="disciplines">
-                                                                <option value="webprogramming">Web programming</option>
-                                                                <option value="desktopapplicationsdevelopment">Desktop applications development</option>
-                                                                <option value="mobileapplicationsdevelopment">Mobile applications development</option>
-                                                                <option value="databasedesignandoptimization">Database design and optimization</option>
-                                                                <option value="databasedesignandoptimization">Database design and optimization</option>
-                                                                <option value="computernetworkingandcybersecurity">Computer networking and cybersecurity</option>
-                                                                <option value="3DCADmodeling">3D CAD modeling</option>
+                                                                <option value="web_programming">Web programming</option>
+                                                                <option value="desktop_applications_development">Desktop applications development</option>
+                                                                <option value="mobile_applications_development">Mobile applications development</option>
+                                                                <option value="database_design_and_optimization">Database design and optimization</option>
+                                                                <option value="database_analysis_and_reports">Database analysis and reports</option>
+                                                                <option value="computer_networking_and_cybersecurity">Computer networking and cybersecurity</option>
+                                                                <option value="3D_CAD_modeling">3D CAD modeling</option>
                                                                 <option value="algorithms">Algorithms</option>
                                                                 <option value="other">Other</option>
                                                             </select>
@@ -82,7 +84,7 @@
                                             <div class="rc-validation-representer valid" data-invalid="false">
                                                 <div class="rc-radios rc-radios--theme-default vertical-on-small">
                                                     <input type="text" id='deadline_input' name="deadline_input" style="display:none" class="deadline_input">
-                                                    <div class="radio-button-wrapper radio-button-wrapper--flexbuttons"><button id="deadline_1" type="button" class="radio-button radio-button--n-1" onclick="clickOndesdline_1_4h()">
+                                                    <div class="radio-button-wrapper radio-button-wrapper--flexbuttons"><button id="deadline_1" type="button" class="radio-button radio-button--n-1 active" onclick="clickOndesdline_1_4h()">
                                                             <div class="button-checkbox"></div>
                                                             <div class="DeadlineControl__radiobutton-content">
                                                                 <div class="DeadlineControl__radiobutton-content__hours">4h</div>
@@ -106,7 +108,7 @@
                                                                 <div class="DeadlineControl__radiobutton-content__hours">2d</div>
                                                             </div>
                                                         </button></div>
-                                                    <div class="radio-button-wrapper radio-button-wrapper--flexbuttons"><button id="deadline_9" type="button" class="radio-button radio-button--n-9 active" onclick="clickOndesdline_9_3d()">
+                                                    <div class="radio-button-wrapper radio-button-wrapper--flexbuttons"><button id="deadline_9" type="button" class="radio-button radio-button--n-9" onclick="clickOndesdline_9_3d()">
                                                             <div class="button-checkbox"></div>
                                                             <div class="DeadlineControl__radiobutton-content">
                                                                 <div class="DeadlineControl__radiobutton-content__hours">3d</div>
@@ -131,7 +133,6 @@
                                                             </div>
                                                         </button></div>
                                                 </div>
-                                                <div class="DeadlineDate"><span>We'll send you the order for review by <span class="DeadlineDate__date">Apr 22, 2021 at 9:23 PM</span></span>.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -140,7 +141,7 @@
                                         <div class="rc-orderform__feature-body">
                                             <div class="rc-validation-representer TaskSizeControl valid" data-invalid="false">
                                                 <div class="rc-radios rc-radios--theme-default vertical-on-small">
-                                                    <input type="text" name="task_size_input" id="task_size_input" style="display:none" class="tasksize_input">
+                                                    <input type="text" name="tasksize_input" id="tasksize_input" style="display:none" class="tasksize_input">
                                                     <div class="radio-button-wrapper radio-button-wrapper--flexbuttons"><button id="SmallTaskSize" type="button" class="radio-button radio-button--n-1 active" onclick="clickOnSmallTaskSize()">
                                                             <div class="button-checkbox"></div>
                                                             <div class="radio-button__content">Small</div>
@@ -199,106 +200,32 @@
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="rc-orderform__step">
-                                <div class="rc-orderform__step-flag"><span class="rc-orderform__step-flag__count">2.</span>Account</div>
-                                <div class="rc-orderform__step__body">
-                                    <div class="Auth">
-                                        <div class="Auth__tabs"><button id="nc" type="button" class="Auth__tabs__item Auth__tabs__item--active">New customer</button><button id="rc" type="button" class="Auth__tabs__item">Returning customer</button></div>
-                                        <div class="Auth__body">
-                                            <form class="rc-auth-form">
-                                                <div class="rc-ui-blocker rc-ui-blocker--size-m rc-ui-blocker--transparency-soft">
-                                                    <div class="rc-orderform__row">
-                                                        <div class="rc-orderform__feature-heading">Email</div>
-                                                        <div class="rc-orderform__feature-body">
-                                                            <div class="rc-validation-representer" data-invalid="false"><input id="nc_mail" name="email" autocomplete="email" type="email" class="UIInput UIInput-default UIInput-default--type-email UIInput-default--size-m UIInput-default--color-default UIInput-default--oneline" tabindex="0" value="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT/fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ/oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/wxZKQcGurQs5oNhqLshzVTMBewW/LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d/YP/g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN/1ov+/drgFWIlfKpVukyYihtgkXNp4mABK+1GtVr+SBhJDbBIubVw+Cd/TDgKO2DPiN3YUo6y/nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"></div>
+                                                        <div style="width:50%; margin:100px auto 0 auto;" class="OrderformCheckoutInfo__order-short-info">
+                                                            <div class="OrderformCheckoutInfo__order-short-info__item">Programming</div>
                                                         </div>
-                                                    </div>
-                                                    <div class="rc-orderform__row">
-                                                        <div class="rc-orderform__feature-heading">Password</div>
-                                                        <div class="rc-orderform__feature-body">
-                                                            <div class="rc-validation-representer" data-invalid="false">
-                                                                <div class="UIPasswordInput"><input id="nc_pass" name="password" autocomplete="new-password" type="password" class="UIInput UIInput-default UIInput-default--type-password UIInput-default--size-m UIInput-default--color-default UIInput-default--oneline" tabindex="0" value="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAABKRJREFUWAnNl0tsVGUUxzvTTlslZUaCloZHY6BRFkp9sDBuqgINpaBp02dIDImwKDG6ICQ8jBYlhg0rxUBYEALTpulMgBlqOqHRDSikJkZdGG0CRqAGUuwDovQ1/s7NPTffnTu3zMxGvuT2vP7n8Z3vu+dOi4r+5xUoJH8sFquamZmpTqfTVeIfCARGQ6HQH83NzaP5xsu5gL6+vuVzc3NdJN1Kkhd8Ev1MMYni4uJjra2tt3wwLvUjCxgYGFg8Pj7+MV5dPOUub3/hX0zHIpFId0NDw6Q/jO4tZOzv76+Znp6+AOb5TBw7/YduWC2Hr4J/IhOD/GswGHy7vb39tyw2S+VbAC1/ZXZ29hKoiOE8RrIvaPE5WvyjoS8CX8sRvYPufYpZYtjGS0pKNoD/wdA5bNYCCLaMYMMEWq5IEn8ZDof3P6ql9pF9jp8cma6bFLGeIv5ShdISZUzKzqPIVnISp3l20caTJsaPtwvc3dPTIx06ziZkkyvY0FnoW5l+ng7guAWnpAI5w4MkP6yy0GQy+dTU1JToGm19sqKi4kBjY+PftmwRYn1ErEOq4+i2tLW1DagsNGgKNv+p6tj595nJxUbyOIF38AwipoSfnJyMqZ9SfD8jxlWV5+fnu5VX6iqgt7d3NcFeUiN0n8FbLEOoGkwdgY90dnbu7OjoeE94jG9wd1aZePRp5AOqw+9VMM+qLNRVABXKkLEWzn8S/FtbdAhnuVQE7LdVafBPq04pMYawO0OJ+6XHZkFcBQA0J1xKgyhlB0EChEWGX8RulsgjvOjEBu+5V+icWOSoFawuVwEordluG28oSCmXSs55SGSCHiXhmDzC25ghMHGbdwhJr6sAdpnyQl0FYIyoEX5CeYOuNHg/NhvGiUUxVgfV2VUAxjtqgPecp9oKoE4sNnbX9HcVgMH8nD5nAoWnKM/5ZmKyySRdq3pCmDncR4DxOwVC64eHh0OGLOcur1Vey46xUZ3IcVl5oa4OlJaWXgQwJwZyhUdGRjqE14VtSnk/mokhxnawiwUvsZmsX5u+rgKamprGMDoA5sKhRCLxpDowSpsJ8vpCj2AUPzg4uIiNfKIyNMkH6Z4hF3k+RgTYz6vVAEiKq2bsniZIC0nTtvMVMwBzoBT9tKkTHp8Ak1V8dTrOE+NgJs7VATESTH5WnVAgfHUqlXK6oHpJEI1G9zEZH/Du16leqHyS0UXBNKmeOMf5NvyislJPB8RAFz4g8IuwofLy8k319fUP1EEouw7L7mC3kUTO1nn3sb02MTFxFpsz87FfJuaH4pu5fF+reDz+DEfxkI44Q0ScSbyOpDGe1RqMBN08o+ha0L0JdeKi/6msrGwj98uZMeon1AGaSj+elr9LwK9IkO33n8cN7Hl2vp1N3PcYbUXOBbDz9bwV1/wCmXoS3+B128OPD/l2LLg8l9APXVlZKZfzfDY7ehlQv0PPQDez6zW5JJdYOXdAwHK2dGIv7GH4YtHJIvEOvvunLCHPPzl3QOLKTkl0hPbKaDUvlTU988xtwfMqQBPQ3m/4mf0yBVlDCSr/CRW0CipAMnGzb9XU1NSRvIX7kSgo++Pg9B8wltxxbHKPZgAAAABJRU5ErkJggg==&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;"><button type="button" class="UIPasswordInput__button" title="Show password"></button></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rc-orderform__row">
-                                                        <div class="rc-orderform__feature-heading">Name<span class="Auth__auth-row__label__optional">(optional)</span></div>
-                                                        <div class="rc-orderform__feature-body">
-                                                            <div class="rc-validation-representer valid" data-invalid="false"><input id="nc_name" name="fullname" autocomplete="name" type="text" class="UIInput UIInput-default UIInput-default--type-text UIInput-default--size-m UIInput-default--color-default UIInput-default--oneline" tabindex="0" value=""></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="rc-orderform__row">
-                                                        <div class="rc-orderform__feature-heading">Phone<span class="Auth__auth-row__label__optional">(optional)</span></div>
-                                                        <div class="rc-orderform__feature-body">
-                                                            <div class="rc-validation-representer valid" data-invalid="false">
-                                                                <div class="rc-tel-input">
-                                                                    <div class="Select rc-tel-input__select Select--single has-value">
-                                                                        <div class="Select-control"><span class="Select-multi-value-wrapper" id="react-select-4--value">
-                                                                                <div class="Select-value" title="Ukraine"><span class="Select-value-label" role="option" aria-selected="true" id="react-select-4--value-item">
-                                                                                        <div class="rc-tel-input__flag rc-tel-input__flag--ua"></div>
-                                                                                    </span></div>
-                                                                                <div role="combobox" aria-expanded="false" aria-owns="" aria-activedescendant="react-select-4--value" class="Select-input" tabindex="0" aria-readonly="false" style="border: 0px; width: 1px; display: inline-block;"></div>
-                                                                            </span><span class="Select-arrow-zone"><span class="Select-arrow"></span></span></div>
-                                                                    </div><input id="nc_phone" name="tel" maxlength="16" autocomplete="tel" type="tel" class="rc-tel-input__phone-input UIInput UIInput-default UIInput-default--type-tel UIInput-default--size-m UIInput-default--color-default UIInput-default--oneline" placeholder="" tabindex="0" value="+380">
+                                                        <div style="width:50%;  margin:auto" class="InvoiceServices">
+                                                            <div class="InvoiceServices__item">
+                                                                <div class="OrderDetails__info-row__label">Total price</div>
+                                                                <div class="InvoiceServices__item__value">
+                                                                    <p id="total_price_info">0$</p>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div style="padding-top: 10px;">
-                                                        <div class="rc-orderform__row">
-                                                            <div class="rc-orderform__feature-heading"></div>
-                                                            <div class="rc-orderform__feature-body"><label class="UICheckbox UICheckbox--theme-default AuthSignUp__checkbox"><input id="nc_agree_marketing" type="checkbox" class="UICheckbox__checkbox UICheckbox__checkbox--theme-default UICheckbox__checkbox--native" name="nc_agree_marketing">
-                                                                    <div class="UICheckbox__checkbox UICheckbox__checkbox--theme-default UICheckbox__checkbox--faux" tabindex="0"></div>
-                                                                    <div class="UICheckbox__label UICheckbox__label--theme--default" for="nc_agree_marketing">I agree to receive discount coupons, exclusive offers, and the latest news by email, SMS, phone, and other electronic means</div>
-                                                                </label></div>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div class="rc-orderform__row">
-                                                            <div class="rc-orderform__feature-heading"></div>
-                                                            <div class="rc-orderform__feature-body">
-                                                                <div class="rc-validation-representer" data-invalid="false"><label class="UICheckbox UICheckbox--theme-default AuthSignUp__checkbox"><input id="nc_agree_terms" type="checkbox" class="UICheckbox__checkbox UICheckbox__checkbox--theme-default UICheckbox__checkbox--native" name="nc_agree_terms">
-                                                                        <div class="UICheckbox__checkbox UICheckbox__checkbox--theme-default UICheckbox__checkbox--faux" tabindex="0"></div>
-                                                                        <div class="UICheckbox__label UICheckbox__label--theme--default" for="nc_agree_terms"><span>I agree to <span style="display: inline-block;">the <a target="_blank" href="/terms-conditions.html">Terms&nbsp;&amp;&nbsp;Conditions</a></span> <span style="display: inline-block;">and <a target="_blank" href="/privacy-policy.html">Privacy&nbsp;Policy</a></span></span></div>
-                                                                    </label></div>
+                                                            <div class="InvoiceServices">
+                                                                <div class="InvoiceServices__item InvoiceServices__item--total-price">
+                                                                    <div class="InvoiceServices__item__heading"></div>
+                                                                    <div class="InvoiceServices__item__value"></div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="Auth__bottom-buttons Auth__bottom-buttons--sign-up"><button class="UIButton UIButton-default-ghost UIButton-default-ghost--size-m UIButton-default-ghost--color-primary UIButton-default-ghost--accent" type="submit" id="nc_signup">Create account &amp; Sign in </button></div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+
+                                                            <button type="submit" class="safecheckoutbutton UIButton-default-filled UIButton-default-filled--size-m UIButton-default-filled--color-primary" type="button" id="checkout">Create order</button>
+
+</div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="NewOrder__sidebar">
-                    <div class="rc-sticky-sidebar" style="opacity: 1;">
-                        <div class="rc-ui-blocker rc-ui-blocker--size-m rc-ui-blocker--transparency-soft">
-                            <div class="OrderformCheckoutInfo" role="presentation">
-                                <div class="OrderformCheckoutInfo__container">
-                                    <div class="OrderformCheckoutInfo__order-short-info">
-                                        <div class="OrderformCheckoutInfo__order-short-info__item">Programming</div>
-                                    </div>
-                                    <div class="InvoiceServices">
-                                        <div class="InvoiceServices__item">
-                                            <div class="OrderDetails__info-row__label">Data analysis and reports</div>
-                                            <div class="InvoiceServices__item__value"><span>$55.00</span></div>
-                                        </div>
-                                        <div class="InvoiceServices__item InvoiceServices__item--total-price">
-                                            <div class="InvoiceServices__item__heading">Total price</div>
-                                            <div class="InvoiceServices__item__value"><span>$55.00</span></div>
-                                        </div>
-                                    </div><button class="safecheckoutbutton OrderformCheckoutInfo__checkout-button UIButton UIButton-default-filled UIButton-default-filled--size-m UIButton-default-filled--color-primary" type="button" id="checkout">Safe checkout </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="rc-ui-blocker CheckoutInfoStickyControl CheckoutInfoStickyControl_hidden rc-ui-blocker--size-xs rc-ui-blocker--transparency-soft"><span class="CheckoutInfoStickyControl__total">$55.00</span><button class="CheckoutInfoStickyControl__button UIButton UIButton-default-filled UIButton-default-filled--size-m UIButton-default-filled--color-primary" type="button">Safe checkout </button></div>
             </div>
         </div>
@@ -309,6 +236,7 @@
 
 <script>
     function clickOndesdline_1_4h() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -326,9 +254,30 @@
         elem13.classList.remove("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "4h";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_3_8h() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -346,9 +295,30 @@
         elem13.classList.remove("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "8h";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_5_24h() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -366,9 +336,30 @@
         elem13.classList.remove("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "24h";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_7_2d() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -386,9 +377,30 @@
         elem13.classList.remove("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "2d";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_9_3d() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -406,9 +418,30 @@
         elem13.classList.remove("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "3d";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_11_5d() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -426,9 +459,30 @@
         elem13.classList.remove("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "5d";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_13_7d() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -446,9 +500,30 @@
         elem13.classList.add("active");
         elem15.classList.remove("active");
         document.getElementById("deadline_input").value = "7d";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOndesdline_15_14d() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("deadline_1");
         var elem3 = document.getElementById("deadline_3");
         var elem5 = document.getElementById("deadline_5");
@@ -466,9 +541,30 @@
         elem13.classList.remove("active");
         elem15.classList.add("active");
         document.getElementById("deadline_input").value = "14d";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOnSmallTaskSize() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("SmallTaskSize");
         var elem2 = document.getElementById("MediumTaskSize");
         var elem3 = document.getElementById("LargeTaskSize");
@@ -477,15 +573,36 @@
         elem2.classList.remove("active");
         elem3.classList.remove("active");
         elem4.classList.remove("active");
-        document.getElementById("task_size_input").value = "small";
+        document.getElementById("tasksize_input").value = "small";
         document.getElementById("TaskSizeControl__descriptors__body").innerHTML = "short practice problems or theoretical questions";
         document.getElementById("TaskSizeControl__deliverables").style.display = "block";
         document.getElementById("TaskSizeControl__deliverables2").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables3").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables4").style.display = "none";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOnMediumTaskSize() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("SmallTaskSize");
         var elem2 = document.getElementById("MediumTaskSize");
         var elem3 = document.getElementById("LargeTaskSize");
@@ -494,15 +611,36 @@
         elem2.classList.add("active");
         elem3.classList.remove("active");
         elem4.classList.remove("active");
-        document.getElementById("task_size_input").value = "medium";
+        document.getElementById("tasksize_input").value = "medium";
         document.getElementById("TaskSizeControl__descriptors__body").innerHTML = "lab report, simple model converted from a drawing";
         document.getElementById("TaskSizeControl__deliverables").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables2").style.display = "block";
         document.getElementById("TaskSizeControl__deliverables3").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables4").style.display = "none";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOnLargeTaskSize() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("SmallTaskSize");
         var elem2 = document.getElementById("MediumTaskSize");
         var elem3 = document.getElementById("LargeTaskSize");
@@ -511,15 +649,36 @@
         elem2.classList.remove("active");
         elem3.classList.add("active");
         elem4.classList.remove("active");
-        document.getElementById("task_size_input").value = "large";
+        document.getElementById("tasksize_input").value = "large";
         document.getElementById("TaskSizeControl__descriptors__body").innerHTML = "moderately complex model created from scratch";
         document.getElementById("TaskSizeControl__deliverables").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables2").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables3").style.display = "block";
         document.getElementById("TaskSizeControl__deliverables4").style.display = "none";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
 
     function clickOnExtraLargeTaskSize() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var elem1 = document.getElementById("SmallTaskSize");
         var elem2 = document.getElementById("MediumTaskSize");
         var elem3 = document.getElementById("LargeTaskSize");
@@ -528,39 +687,80 @@
         elem2.classList.remove("active");
         elem3.classList.remove("active");
         elem4.classList.add("active");
-        document.getElementById("task_size_input").value = "extralarge";
+        document.getElementById("tasksize_input").value = "extralarge";
         document.getElementById("TaskSizeControl__descriptors__body").innerHTML = "complex project created from scratch";
         document.getElementById("TaskSizeControl__deliverables").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables2").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables3").style.display = "none";
         document.getElementById("TaskSizeControl__deliverables4").style.display = "block";
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
     }
-</script>
-<script>
-    $(document).ready(function() {
+    $('#disciplines').change(function() {
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $(".safecheckoutbutton").click(function() {
-            $.ajax({
-                /* the route pointing to the post function */
-                url: '/ajax-request',
-                type: 'POST',
-                /* send the csrf-token and the input to the controller */
-                data: {
-                    _token: CSRF_TOKEN,
-                    disciplines: $(".disciplines").val(),
-                    instructions: $(".PaperInstructionsControl_textarea").val(),
-                    software: $(".softwareinput").val(),
-                    deadline: $(".deadline_input").val(),
-                    tasksize: $(".tasksize_input").val()
-                },
-                dataType: 'JSON',
-                /* remind that 'data' is the response of the AjaxController */
-                success: function(data) {
-                    alert(data.disciplines +" "+ data.instructions +" "+ data.software +" "+ data.deadline +" "+ data.tasksize);
-                }
-            });
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
         });
     });
+
+    function ajaxPrice() {
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            /* the route pointing to the post function */
+            url: '/ajax-request',
+            type: 'POST',
+            /* send the csrf-token and the input to the controller */
+            data: {
+                _token: CSRF_TOKEN,
+                disciplines: $(".disciplines").val(),
+                instructions: $(".PaperInstructionsControl_textarea").val(),
+                software: $(".softwareinput").val(),
+                deadline: $(".deadline_input").val(),
+                tasksize: $(".tasksize_input").val()
+            },
+            dataType: 'JSON',
+            /* remind that 'data' is the response of the AjaxController */
+            success: function(data) {
+                var paragraph = document.getElementById("total_price_info");
+                paragraph.textContent = data.price + " $";
+            }
+        });
+    }
 </script>
 
 </html>
